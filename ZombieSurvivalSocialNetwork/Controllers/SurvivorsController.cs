@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ZombieSurvivalSocialNetwork.Data;
 using ZombieSurvivalSocialNetwork.Models;
 
@@ -52,6 +53,22 @@ namespace ZombieSurvivalSocialNetwork.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(survivor);
+        }
+
+        /// <summary>
+        /// Retrieves a list of all survivors.
+        /// </summary>
+        /// <returns>A list of survivors with inventory details.</returns>
+        [HttpGet]
+        public async Task<IActionResult> ListAllSurvivors()
+        {
+            // Retrieve a list of survivors including inventory details
+            var survivors = await _context.Survivors
+                .Include(s => s.Inventory)
+                .OrderBy(s => s.Name)
+                .ToListAsync();
+
+            return Ok(survivors);
         }
     }
 }
