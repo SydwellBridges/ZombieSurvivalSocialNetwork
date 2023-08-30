@@ -95,5 +95,26 @@ namespace ZombieSurvivalSocialNetwork.Controllers
 
             return NotFound();
         }
+
+        /// <summary>
+        /// Flags a survivor as infected.
+        /// </summary>
+        /// <param name="id">The ID of the survivor to flag as infected.</param>
+        /// <returns>No content if successful, or NotFound if the survivor is not found.</returns>
+        [HttpPut("{id}/infection")]
+        public IActionResult FlagSurvivorAsInfected(Guid id)
+        {
+            var survivor = _context.Survivors.Find(id);
+
+            if (survivor == null)
+            {
+                return NotFound();
+            }
+
+            survivor.Infected = true;
+            _context.SaveChanges();
+
+            return NoContent();
+        }
     }
 }
