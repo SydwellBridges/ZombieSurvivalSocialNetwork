@@ -70,5 +70,30 @@ namespace ZombieSurvivalSocialNetwork.Controllers
 
             return Ok(survivors);
         }
+
+        /// <summary>
+        /// Updates the location of a survivor.
+        /// </summary>
+        /// <param name="id">The ID of the survivor to update.</param>
+        /// <param name="update">The new location details.</param>
+        /// <returns>The updated survivor with the new location.</returns>
+        [HttpPut("{id}/location")]
+        public async Task<IActionResult> UpdateSurvivorLocation(Guid id, SurvivorLocationUpdate update)
+        {
+            // Find the survivor by ID
+            var survivor = await _context.Survivors.FindAsync(id);
+
+            if (survivor != null)
+            {
+                survivor.Latitude = update.Latitude;
+                survivor.Longitude = update.Longitude;
+
+                await _context.SaveChangesAsync();
+
+                return Ok(survivor);
+            }
+
+            return NotFound();
+        }
     }
 }
